@@ -18,6 +18,11 @@ The blessing copy is in `index.html`.
 
 ## Run
 
+The quickest option is to double-click `index.html`. The page uses a classic
+Three.js build so it runs directly from disk without a local server.
+
+For a local HTTP preview:
+
 ```powershell
 node server.mjs
 ```

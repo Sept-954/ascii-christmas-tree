@@ -6,3 +6,4 @@ reference/
 vendor/ffmpeg/
 *.zip
 run-check.png
+file-check.png

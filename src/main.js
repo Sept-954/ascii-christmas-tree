@@ -1,4 +1,8 @@
-import * as THREE from "../vendor/three.module.min.js";
+const THREE = window.THREE;
+
+if (!THREE) {
+  throw new Error("Three.js did not load. Keep the vendor folder next to index.html.");
+}
 
 const CONFIG = {
   background: 0x030712,
