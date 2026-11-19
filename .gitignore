@@ -1,0 +1,8 @@
+node_modules/
+dist/
+capture/
+capture-test/
+reference/
+vendor/ffmpeg/
+*.zip
+run-check.png

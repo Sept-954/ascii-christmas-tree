@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030712" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23030712'/%3E%3Cpath d='M32 5 20 24h7l-9 14h10L13 54h38L36 38h10l-9-14h7Z' fill='%23ffd76a'/%3E%3C/svg%3E" />
+    <meta
+      name="description"
+      content="A colorful 3D ASCII Christmas tree made from letters and symbols, with a glowing golden spiral, snow and a Christmas blessing."
+    />
+    <title>3D ASCII Christmas Tree</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="3D ASCII Christmas tree animation">
+      <canvas id="scene" aria-label="A rotating 3D Christmas tree made of ASCII characters"></canvas>
+
+      <header class="masthead">
+        <span class="eyebrow">ASCII / WINTER 2026</span>
+        <a class="download" href="./ascii-christmas-tree.mp4" download>
+          下载 MP4
+          <span aria-hidden="true">↓</span>
+        </a>
+      </header>
+
+      <section class="blessing" aria-live="polite">
+        <p class="dedication">TO THE ONE I WANT TO SPEND CHRISTMAS WITH</p>
+        <h1>MERRY CHRISTMAS</h1>
+        <p class="wish">圣诞快乐 · 愿每一次相遇，都像雪落在灯上</p>
+      </section>
+
+      <div class="vignette" aria-hidden="true"></div>
+      <div class="grain" aria-hidden="true"></div>
+    </main>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
