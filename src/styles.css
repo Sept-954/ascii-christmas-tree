@@ -97,14 +97,15 @@ body {
   text-shadow:
     0 0 18px rgba(255, 207, 86, 0.28),
     0 2px 18px rgba(0, 0, 0, 0.74);
-  animation: rise-in 2.8s cubic-bezier(0.2, 0.7, 0.2, 1) 2.1s both;
+  animation: rise-in 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) 7.2s both;
 }
 
 .dedication {
   margin: 0 0 0.28rem;
-  color: rgba(241, 231, 194, 0.7);
-  font-size: clamp(8px, 0.68vw, 10px);
-  letter-spacing: 0.22em;
+  color: rgba(255, 239, 189, 0.86);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: clamp(11px, 0.9vw, 14px);
+  letter-spacing: 0.08em;
   line-height: 1.55;
 }
 
@@ -153,7 +154,7 @@ body.recording .download {
 }
 
 body.recording .blessing {
-  animation-delay: 1.65s;
+  animation-delay: 7.2s;
 }
 
 @keyframes rise-in {

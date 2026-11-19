@@ -18,6 +18,11 @@ const GLYPHS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#*+./\\|_-=<>[]{}()@%&$";
 const GLYPH_LIST = Array.from(new Set(GLYPHS)).slice(0, 64);
 const GLYPH_INDEX = new Map(GLYPH_LIST.map((glyph, index) => [glyph, index]));
 const TAU = Math.PI * 2;
+const MESSAGE_GLYPHS = {
+  tree: "MERRYCHRISTMASWITHYOU",
+  gift: "GIFTFORYOUWITHLOVEJOY",
+  trunk: "LOVEJOYHOPEWARMTH",
+};
 
 const PALETTE = {
   forest: [0x21e77d, 0x00c97b, 0x91ff5b, 0x2ff2b3, 0x0bbf83, 0x78ffb1],
@@ -127,7 +132,8 @@ function buildTree() {
       const y = yStart + localY * 1.22 + (Math.random() - 0.5) * 0.16;
       const color = chooseTreeColor(localY, radialFill, tier);
       const isAccent = Math.random() < 0.085;
-      const glyph = pickGlyph(isAccent ? "#*+%@&" : "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#*+./|");
+      const glyphSource = isAccent ? "#*+@" : MESSAGE_GLYPHS.tree;
+      const glyph = glyphSource[(i + tier * 17 + Math.round(localY * 42)) % glyphSource.length];
 
       data.push({
         position: [x, y, z],
@@ -138,6 +144,7 @@ function buildTree() {
         phase: Math.random() * TAU,
         pulse: isAccent ? 1.8 : 0.5,
         kind: isAccent ? 1 : 0,
+        reveal: 0.7 + tier * 0.48 + localY * 0.34 + Math.random() * 0.28,
       });
     }
 
@@ -181,6 +188,7 @@ function buildSpiral() {
       phase: i * 0.41,
       pulse: 2.2,
       kind: 2,
+      reveal: 3.0 + (1 - t) * 3.1 + Math.random() * 0.22,
     });
   }
 
@@ -220,6 +228,7 @@ function buildStar() {
       phase: Math.random() * TAU,
       pulse: 2.5,
       kind: 2,
+      reveal: 0.12 + Math.random() * 0.7,
     });
   }
 
@@ -237,6 +246,7 @@ function buildStar() {
         phase: angle + i,
         pulse: 2.6,
         kind: 2,
+        reveal: 0.25 + (13 - i) * 0.045 + Math.random() * 0.18,
       });
     }
   }
@@ -261,6 +271,7 @@ function buildGifts() {
       color: 0xff3f6e,
       darks: [0xe42657, 0xc91e49, 0xff5d87],
       ribbon: 0xffd55f,
+      reveal: 3.8,
     },
     {
       center: [2.65, -2.31, 1.94],
@@ -269,6 +280,7 @@ function buildGifts() {
       color: 0x4fdd9d,
       darks: [0x1dbb7a, 0x19a86a, 0x6aebac],
       ribbon: 0xffe483,
+      reveal: 4.15,
     },
     {
       center: [0.18, -2.68, 2.46],
@@ -277,6 +289,7 @@ function buildGifts() {
       color: 0x9a70ff,
       darks: [0x7045e9, 0x5b33c6, 0xb28ffc],
       ribbon: 0xffc94b,
+      reveal: 4.45,
     },
   ];
 
@@ -338,7 +351,9 @@ function sampleGift(gift) {
         const isRibbon = ribbonU || ribbonV;
         const isEdge = u === 0 || u === uCount || v === 0 || v === vCount;
         const color = isRibbon ? gift.ribbon : isEdge ? pick(gift.darks) : gift.color;
-        const glyph = isRibbon ? pickGlyph("#=+X0") : pickGlyph("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#");
+        const glyph = isRibbon
+          ? pickGlyph("#=+X")
+          : MESSAGE_GLYPHS.gift[(u * 7 + v * 11 + Math.round(nu * 3)) % MESSAGE_GLYPHS.gift.length];
 
         data.push({
           position: [
@@ -353,6 +368,7 @@ function sampleGift(gift) {
           phase: Math.random() * TAU,
           pulse: isRibbon ? 2.4 : 0.8,
           kind: isRibbon ? 2 : 0,
+          reveal: gift.reveal + Math.random() * 0.62,
         });
       }
     }
@@ -382,6 +398,7 @@ function sampleGift(gift) {
         phase: theta + loop * 2,
         pulse: 2.2,
         kind: 2,
+        reveal: gift.reveal + 0.35 + t * 0.32,
       });
     }
   }
@@ -401,12 +418,13 @@ function buildTrunkAndRoots() {
     data.push({
       position: [Math.cos(theta) * radius, -2.45 + t * 1.05, Math.sin(theta) * radius],
       color: pick(PALETTE.bark),
-      char: charIndex(pickGlyph("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#")),
+      char: charIndex(MESSAGE_GLYPHS.trunk[i % MESSAGE_GLYPHS.trunk.length]),
       size: 0.09 + Math.random() * 0.08,
       alpha: 0.66 + Math.random() * 0.32,
       phase: Math.random() * TAU,
       pulse: 0.25,
       kind: 0,
+      reveal: 0.34 + t * 0.82,
     });
   }
 
@@ -423,12 +441,15 @@ function buildTrunkAndRoots() {
       data.push({
         position: [x, y, z],
         color: pick(PALETTE.bark),
-        char: charIndex(pickGlyph("/\\_-=0123456789")),
+        char: charIndex(
+          i % 9 === 0 ? pickGlyph("/\\_-=") : MESSAGE_GLYPHS.trunk[i % MESSAGE_GLYPHS.trunk.length],
+        ),
         size: 0.075 + (1 - t) * 0.075,
         alpha: 0.72 + Math.random() * 0.24,
         phase: t * 9 + root,
         pulse: 0.3,
         kind: 0,
+        reveal: 0.28 + t * 0.72,
       });
     }
   }
@@ -455,6 +476,7 @@ function buildSnow() {
       phase: Math.random() * TAU,
       pulse: 0.55,
       kind: 4,
+      reveal: Math.random() * 1.0,
     });
     snowStats.push({
       speed: 0.14 + Math.random() * 0.31,
@@ -479,6 +501,7 @@ function makeGlyphPoints(data, options = {}) {
   const phases = new Float32Array(data.length);
   const pulses = new Float32Array(data.length);
   const kinds = new Float32Array(data.length);
+  const reveals = new Float32Array(data.length);
   const color = new THREE.Color();
 
   data.forEach((item, index) => {
@@ -495,6 +518,7 @@ function makeGlyphPoints(data, options = {}) {
     phases[index] = item.phase;
     pulses[index] = item.pulse;
     kinds[index] = item.kind;
+    reveals[index] = item.reveal ?? defaultReveal(item);
   });
 
   const geometry = new THREE.BufferGeometry();
@@ -506,6 +530,7 @@ function makeGlyphPoints(data, options = {}) {
   geometry.setAttribute("aPhase", new THREE.BufferAttribute(phases, 1));
   geometry.setAttribute("aPulse", new THREE.BufferAttribute(pulses, 1));
   geometry.setAttribute("aKind", new THREE.BufferAttribute(kinds, 1));
+  geometry.setAttribute("aReveal", new THREE.BufferAttribute(reveals, 1));
 
   const material = new THREE.ShaderMaterial({
     uniforms: {
@@ -529,6 +554,7 @@ function makeGlyphPoints(data, options = {}) {
       attribute float aPhase;
       attribute float aPulse;
       attribute float aKind;
+      attribute float aReveal;
       varying vec3 vColor;
       varying float vChar;
       varying float vAlpha;
@@ -544,12 +570,18 @@ function makeGlyphPoints(data, options = {}) {
         vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
         float perspective = uPointScale / max(1.0, -mvPosition.z);
         float haloScale = mix(1.0, 1.82, uHalo);
-        gl_PointSize = max(1.0, aSize * perspective * haloScale * localPulse * uPixelRatio);
+        float reveal = smoothstep(aReveal, aReveal + 0.72, uTime);
+        gl_PointSize = aSize * perspective * haloScale * localPulse * uPixelRatio * reveal;
         gl_Position = projectionMatrix * mvPosition;
 
-        vColor = aColor * (1.0 + max(0.0, shimmer) * aPulse * 0.08);
+        float birthGlow = sin(reveal * 3.14159265) * 0.55;
+        vColor = aColor * (1.0 + max(0.0, shimmer) * aPulse * 0.08 + birthGlow);
         vChar = aChar;
-        vAlpha = aAlpha * (0.82 + 0.18 * sin(uTime * 1.7 + aPhase)) * (uHalo > 0.5 ? 0.52 : 1.0);
+        vAlpha =
+          reveal *
+          aAlpha *
+          (0.82 + 0.18 * sin(uTime * 1.7 + aPhase)) *
+          (uHalo > 0.5 ? 0.52 : 1.0);
         vKind = aKind;
       }
     `,
@@ -711,6 +743,12 @@ function currentTime() {
   if (SCENE.frozenTime !== null) return SCENE.frozenTime;
   if (SCENE.paused) return 0;
   return (performance.now() - SCENE.clockStart) / 1000;
+}
+
+function defaultReveal(item) {
+  if (item.kind === 4) return 0.1;
+  if (item.kind > 1) return 2.4;
+  return Math.max(0.35, 0.55 + (item.position[1] + 2.2) * 0.38);
 }
 
 function charIndex(glyph) {
